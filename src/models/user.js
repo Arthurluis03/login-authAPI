@@ -43,5 +43,30 @@ async function findUserEmail(email) {
         throw error
     }
 }
+async function findById(id) {
+    try {
+        const sql = `
+            SELECT * FROM users WHERE id = ?
+        `
+        const [dados] = await conect.query(sql, [id])
+        return dados[0]
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+    
+}
+async function updateImage(id, imagem) {
+    try {
+        const sql = `
+            UPDATE users SET imagem = ? where id = ? 
 
-export default { listUsers, registerUsers, findUserEmail }
+        `
+        const [dados] = await conect.query(sql, [id, imagem])
+        return dados
+    } catch (error) {
+        
+    }
+}
+
+export default { listUsers, registerUsers, findUserEmail, findById, updateImage }

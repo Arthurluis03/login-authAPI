@@ -79,7 +79,7 @@ class UserController {
                 {
                     id: user.id,
                     email: user.email, // Payload 
-                    role: user.role        
+                    role: user.role
                 },
                 process.env.JWT_SECRET, // Signature(secret)
                 {
@@ -110,6 +110,39 @@ class UserController {
             return res.status(500).json({ message })
         }
     }
+    static async FindId(req, res) {
+        try {
+            const { id } = req.params; // const id = req.params.id
+            if (isNaN(id)) return res.status(400).json({ message: "Id inválido" })
+            const idUser = await modelUsers.findById(id)
+            if (!idUser) return res.status(404).json({ message: "User não encontrado" })
+            return res.status(200).json({ idUser })
+        } catch (error) {
+            console.error(error)
+            let message = 'Erro de servidor!'
+            return res.status(500).json({ message })
+        }
+    }
+    static async imageUpdate(req, res) {
+        try {
+            const { id } = req.params
+            if (isNaN(id)) return res.status(400).json({ message: "Id inválido" })
+            // veificar se existe algo 
+            if (!req.file) return res.status(400).json({ message: "Arquivo não existe" })
+            
+            const {filename} = req.file;
+            const imagem = `uploads/${filename}`
+            await modelUsers.updateImage(id, imagem)
+            return res.status(200).json({message: "arquivo atualizado com sucesso"})
+
+        } catch(error) {
+            console.error(error)
+            let message = 'Erro de servidor!'
+            return res.status(500).json({ message })
+
+        }
+}
+
 
 }
 
