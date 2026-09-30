@@ -2,6 +2,7 @@ import express from 'express';
 import UserController from '../controllers/usersController';
 import authMiddleware from '../middlewares/authMiddleware';
 import rolesMiddleware from "../middlewares/adminMiddleare.js";
+import upload from '../middlewares/uploadMiddleware.js';
 const routesUser = express.Router();
 
 routesUser.get('/users', UserController.findUsers);
@@ -11,5 +12,6 @@ routesUser.get('/user/auth/admin', authMiddleware, rolesMiddleware('admin'), (re
 })
 routesUser.post('/users/register', UserController.userRegister)
 routesUser.post('/users/auth/login', UserController.userLogin)
+routesUser.put("/users/:id/images", upload.single("imagem"), UserController.imageUpdate)
 
 export default routesUser;
